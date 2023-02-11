@@ -16,7 +16,7 @@
 class Robot : public frc::TimedRobot {
  public:
 
-  WPI_Pigeon2 pigeon{1};
+  WPI_Pigeon2 pigeon{2};
   float yaw;
   float pitch;
   float roll;
@@ -29,20 +29,54 @@ class Robot : public frc::TimedRobot {
   float baseBalanceRate = 0.022;
   float balanceThreshold = 8;
 
+  double autoXRate;
+  double autoYRate;
+  double autoRotRate;
+
+  double autoX;
+  double autoY;
+  double autoRot;
+
+  void Balance(){
+    if (fabs(pitch) > balanceThreshold)
+    {
+      balanceRate = (baseBalanceRate * -adjustedPitch);
+      if (abs(balanceRate) > maxBalanceRate)
+      {
+        balanceRate = maxBalanceRate;
+      }
+      m_allMotors.Set(balanceRate);
+    }
+  }
+
+  void HoldPos(){
+    //autoX = autoXRate * ;
+    //autoY = autoYRate * ;
+    //autoRot = autoRotRate * ;
+
+
+    m_robotDrive.DriveCartesian(autoY, autoX, autoRot);
+  }
+
   void RobotInit() override {
     // Invert the right side motors. You may need to change or remove this to
     // match your robot.
-    m_rearRight.SetInverted(false);
-    m_rearLeft.SetInverted(true);
-    m_frontLeft.SetInverted(true);
+    m_frontRight.SetInverted(true);
+    m_rearRight.SetInverted(true);
+    m_rearLeft.SetInverted(false);
+    m_frontLeft.SetInverted(false);
     pigeon.Reset();
     pigeon.Calibrate();
   }
+
 
   void RobotPeriodic() override {
     yaw = pigeon.GetYaw();
     pitch = pigeon.GetPitch();
     roll = pigeon.GetRoll();
+
+    double rate = pigeon.GetRate();
+    
     pigeon.Calibrate();
 
     adjustedPitch = pitch - initPitch;
@@ -50,6 +84,7 @@ class Robot : public frc::TimedRobot {
     frc::SmartDashboard::PutNumber("Yaw", yaw);
     frc::SmartDashboard::PutNumber("Pitch", pitch);
     frc::SmartDashboard::PutNumber("Roll", roll);
+    frc::SmartDashboard::PutNumber("rate", rate);
     frc::SmartDashboard::PutBoolean("Balanced", balance);
     initPitch = frc::SmartDashboard::GetNumber("PitchOffset", initPitch);
     maxBalanceRate = frc::SmartDashboard::GetNumber("Max Balance Rate", maxBalanceRate);
@@ -71,14 +106,17 @@ class Robot : public frc::TimedRobot {
     {
       if (balanceMode)
       {
+        exit(balance);
         balanceMode = false;
       }
       else
       {
+        Balance();
         balanceMode = true;
       }
     }
 
+    /*
     if (fabs(pitch) > balanceThreshold && balanceMode)
     {
       balance = false;
@@ -90,13 +128,15 @@ class Robot : public frc::TimedRobot {
       m_allMotors.Set(balanceRate);
     }
     else{balance = true;}
+    */
   }
 
+
  private:
-  static constexpr int kFrontLeftChannel = 2;
-  static constexpr int kRearLeftChannel = 3;
-  static constexpr int kFrontRightChannel = 0;
-  static constexpr int kRearRightChannel = 1;
+  static constexpr int kFrontLeftChannel = 1;
+  static constexpr int kRearLeftChannel = 0;
+  static constexpr int kFrontRightChannel = 3;
+  static constexpr int kRearRightChannel = 2;
   static constexpr int kJoystickChannel = 0;
 
   frc::PWMSparkMax m_frontLeft{kFrontLeftChannel};
