@@ -158,7 +158,7 @@ Children:
           validators: [Solenoid]
           value: '0'
       Base: Double Solenoid
-      Name: Arm - 1
+      Name: Arm1
     Properties:
       Send to SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: false,
         name: Send to SmartDashboard, validators: null, value: false}
