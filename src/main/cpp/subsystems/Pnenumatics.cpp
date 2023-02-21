@@ -78,3 +78,7 @@ void Pnenumatics::MoveStage(int stage) {
         Pnenumatics::m_arm1.Set(frc::DoubleSolenoid::kOff);
     }
 }
+
+void Pnenumatics::OffStage() {
+     Pnenumatics::m_arm1.Set(frc::DoubleSolenoid::kOff);
+}

@@ -44,7 +44,7 @@ bool ArmReverse::IsFinished() {
 
 // Called once after isFinished returns true
 void ArmReverse::End(bool interrupted) {
-
+    m_pnenumatics->OffStage();
 }
 
 bool ArmReverse::RunsWhenDisabled() const {

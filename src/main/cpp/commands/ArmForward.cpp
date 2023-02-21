@@ -44,7 +44,7 @@ bool ArmForward::IsFinished() {
 
 // Called once after isFinished returns true
 void ArmForward::End(bool interrupted) {
-
+    m_pnenumatics->OffStage();
 }
 
 bool ArmForward::RunsWhenDisabled() const {
