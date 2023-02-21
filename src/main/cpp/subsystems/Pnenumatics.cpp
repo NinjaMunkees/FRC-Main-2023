@@ -44,3 +44,37 @@ void Pnenumatics::SimulationPeriodic() {
 
 // Put methods for controlling this subsystem
 // here. Call these from Commands.
+void Pnenumatics::setStage(int to) {
+    // if (to >= 1) {
+    // Pnenumatics::armStage = 0;
+    // }else {
+    // Pnenumatics::armStage = to;
+    // }
+    Pnenumatics::isOpen = !Pnenumatics::isOpen;
+}
+
+int Pnenumatics::getStage() {
+    return Pnenumatics::armStage;
+}
+
+void Pnenumatics::MoveStage(int stage) {
+    // switch (stage)
+    // {
+    // case 0:
+    //     Pnenumatics::m_arm1.Set(frc::DoubleSolenoid::kReverse);
+    //     break;
+    // case 1:
+    //     Pnenumatics::m_arm1.Set(frc::DoubleSolenoid::kForward);
+    //     break;
+    // default:
+    //     Pnenumatics::m_arm1.Set(frc::DoubleSolenoid::kOff);
+    //     break;
+    // }
+    if (Pnenumatics::isOpen) {
+        Pnenumatics::m_arm1.Set(frc::DoubleSolenoid::kReverse);
+    }else if (!Pnenumatics::isOpen) {
+        Pnenumatics::m_arm1.Set(frc::DoubleSolenoid::kForward);
+    } else {
+        Pnenumatics::m_arm1.Set(frc::DoubleSolenoid::kOff);
+    }
+}
