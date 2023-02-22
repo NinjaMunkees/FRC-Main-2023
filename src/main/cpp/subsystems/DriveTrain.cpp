@@ -23,8 +23,8 @@ DriveTrain::DriveTrain(){
 
  AddChild("Mecanum Drive", &m_mecanumDrive);
  m_mecanumDrive.SetSafetyEnabled(true);
-m_mecanumDrive.SetExpiration(0.1_s);
-m_mecanumDrive.SetMaxOutput(1.0);
+ m_mecanumDrive.SetExpiration(0.1_s);
+ m_mecanumDrive.SetMaxOutput(1.0);
 
 
  AddChild("Right Front", &m_rightFront);

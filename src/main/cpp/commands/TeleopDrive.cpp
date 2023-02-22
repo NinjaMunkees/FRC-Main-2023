@@ -33,11 +33,25 @@ void TeleopDrive::Initialize() {
 
 }
 
+float deadZone  = 0.175;
+double mechanumX;
+double mechanumY;
+double mechanumRot;
+
 // Called repeatedly when this Command is scheduled to run
 void TeleopDrive::Execute() {
-    double mechanumX = RobotContainer::GetInstance()->getXboxController()->GetLeftX();
-    double mechanumY = RobotContainer::GetInstance()->getXboxController()->GetLeftY();
-    double mechanumRot = RobotContainer::GetInstance()->getXboxController()->GetRightX();
+    if (fabs(RobotContainer::GetInstance()->getXboxController()->GetLeftX()) > deadZone)
+    {mechanumX = RobotContainer::GetInstance()->getXboxController()->GetLeftX();}
+    else{mechanumX = 0;}
+
+    if (fabs(RobotContainer::GetInstance()->getXboxController()->GetLeftY()) > deadZone)
+    {mechanumY = RobotContainer::GetInstance()->getXboxController()->GetLeftY();}
+    else{mechanumY = 0;}
+
+    if (fabs(RobotContainer::GetInstance()->getXboxController()->GetRightX()) > deadZone)
+    {mechanumRot = RobotContainer::GetInstance()->getXboxController()->GetRightX();}
+    else{mechanumRot = 0;}
+    
     m_drivetrain->MechanumDrive(mechanumY, mechanumX, mechanumRot);
 }
 
