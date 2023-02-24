@@ -133,32 +133,88 @@ Children:
     - Children: []
       Properties:
         Forward Module (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
-          choices: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
-            '12', '13', '14', '15', '16', '17', '18', '19', '20']
+          choices: &id004 ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+            '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
           default: '0'
           name: Forward Module (Solenoid)
-          validators: [Solenoid]
+          validators: &id005 [Solenoid]
           value: '3'
         Reverse Channel (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
-          choices: ['0', '1', '2', '3', '4', '5', '6', '7']
+          choices: &id006 ['0', '1', '2', '3', '4', '5', '6', '7']
           default: '0'
           name: Reverse Channel (Solenoid)
           validators: null
           value: '1'
         Forward Module Type (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
-          choices: [CTREPCM, REVPH]
+          choices: &id007 [CTREPCM, REVPH]
           default: CTREPCM
           name: Forward Module Type (Solenoid)
           validators: null
           value: REVPH
         Forward Channel (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
-          choices: ['0', '1', '2', '3', '4', '5', '6', '7']
+          choices: &id008 ['0', '1', '2', '3', '4', '5', '6', '7']
           default: '0'
           name: Forward Channel (Solenoid)
-          validators: [Solenoid]
+          validators: &id009 [Solenoid]
           value: '0'
       Base: Double Solenoid
       Name: Arm1
+    - Children: []
+      Properties:
+        Forward Module (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id004
+          default: '0'
+          name: Forward Module (Solenoid)
+          validators: *id005
+          value: '2'
+        Reverse Channel (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id006
+          default: '0'
+          name: Reverse Channel (Solenoid)
+          validators: null
+          value: '0'
+        Forward Module Type (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id007
+          default: CTREPCM
+          name: Forward Module Type (Solenoid)
+          validators: null
+          value: REVPH
+        Forward Channel (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id008
+          default: '0'
+          name: Forward Channel (Solenoid)
+          validators: *id009
+          value: '3'
+      Base: Double Solenoid
+      Name: Arm2
+    - Children: []
+      Properties:
+        Forward Module (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id004
+          default: '0'
+          name: Forward Module (Solenoid)
+          validators: *id005
+          value: '4'
+        Reverse Channel (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id006
+          default: '0'
+          name: Reverse Channel (Solenoid)
+          validators: null
+          value: '0'
+        Forward Module Type (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id007
+          default: CTREPCM
+          name: Forward Module Type (Solenoid)
+          validators: null
+          value: REVPH
+        Forward Channel (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
+          choices: *id008
+          default: '0'
+          name: Forward Channel (Solenoid)
+          validators: *id009
+          value: '5'
+      Base: Double Solenoid
+      Name: Disco
     Properties:
       Send to SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: false,
         name: Send to SmartDashboard, validators: null, value: false}
@@ -179,33 +235,41 @@ Children:
   - Children:
     - Children: []
       Properties:
-        Input Channel (Digital): !!robotbuilder.data.properties.ChoicesProperty
+        Ping Channel (Digital): !!robotbuilder.data.properties.ChoicesProperty
           choices: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
             '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
             '24', '25']
           default: '0'
-          name: Input Channel (Digital)
+          name: Ping Channel (Digital)
           validators: [DigitalChannel]
-          value: '9'
-      Base: Digital Input
-      Name: LidarLite
+          value: '1'
+        Echo Channel (Digital): !!robotbuilder.data.properties.ChoicesProperty
+          choices: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
+            '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23',
+            '24', '25']
+          default: '0'
+          name: Echo Channel (Digital)
+          validators: [DigitalChannel]
+          value: '0'
+      Base: Ultrasonic
+      Name: Ultrasonic
     Properties:
       Send to SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: false,
-        name: Send to SmartDashboard, validators: null, value: false}
+        name: Send to SmartDashboard, validators: null, value: true}
       Default command parameters: !!robotbuilder.data.properties.ParametersProperty
         default: []
         name: Default command parameters
         validators: null
         value: []
       Default Command: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
-        name: Default Command, type: Command, validators: null, value: None}
+        name: Default Command, type: Command, validators: null, value: Teleop Drive}
       Constants: !!robotbuilder.data.properties.ConstantsProperty
         default: []
         name: Constants
         validators: null
         value: []
     Base: Subsystem
-    Name: Lidar
+    Name: Ultrasonic
   Properties: {}
   Base: Subsystems
   Name: Subsystems
@@ -214,7 +278,7 @@ Children:
     - Children: []
       Properties:
         Interruptible: !!robotbuilder.data.properties.ChoicesProperty
-          choices: &id004 [CancelSelf, CancelIncoming]
+          choices: &id010 [CancelSelf, CancelIncoming]
           default: CancelSelf
           name: Interruptible
           validators: null
@@ -229,7 +293,7 @@ Children:
         Send to SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: false,
           name: Send to SmartDashboard, validators: null, value: false}
         Button: !!robotbuilder.data.properties.ChoicesProperty
-          choices: &id005 [A, B, X, Y, Back, Start, LeftBumper, RightBumper, LeftStick,
+          choices: &id011 [A, B, X, Y, Back, Start, LeftBumper, RightBumper, LeftStick,
             RightStick]
           default: A
           name: Button
@@ -239,14 +303,14 @@ Children:
           default: None
           name: Command
           type: Command
-          validators: &id006 [TypeDropdownSelected]
+          validators: &id012 [TypeDropdownSelected]
           value: ArmForward
         Timeout: !!robotbuilder.data.properties.PositiveDoubleProperty {default: 0,
           name: Timeout, validators: null, value: 0.0}
         Add Timeout: !!robotbuilder.data.properties.BooleanProperty {default: false,
           name: Add Timeout, validators: null, value: false}
         When to Run: !!robotbuilder.data.properties.ChoicesProperty
-          choices: &id007 [onTrue, onFalse, whileTrue, whileFalse, toggleOnTrue, toggleOnFalse]
+          choices: &id013 [onTrue, onFalse, whileTrue, whileFalse, toggleOnTrue, toggleOnFalse]
           default: onTrue
           name: When to Run
           validators: null
@@ -256,7 +320,7 @@ Children:
     - Children: []
       Properties:
         Interruptible: !!robotbuilder.data.properties.ChoicesProperty
-          choices: *id004
+          choices: *id010
           default: CancelSelf
           name: Interruptible
           validators: null
@@ -271,7 +335,7 @@ Children:
         Send to SmartDashboard: !!robotbuilder.data.properties.BooleanProperty {default: false,
           name: Send to SmartDashboard, validators: null, value: false}
         Button: !!robotbuilder.data.properties.ChoicesProperty
-          choices: *id005
+          choices: *id011
           default: A
           name: Button
           validators: null
@@ -280,14 +344,14 @@ Children:
           default: None
           name: Command
           type: Command
-          validators: *id006
+          validators: *id012
           value: ArmReverse
         Timeout: !!robotbuilder.data.properties.PositiveDoubleProperty {default: 0,
           name: Timeout, validators: null, value: 0.0}
         Add Timeout: !!robotbuilder.data.properties.BooleanProperty {default: false,
           name: Add Timeout, validators: null, value: false}
         When to Run: !!robotbuilder.data.properties.ChoicesProperty
-          choices: *id007
+          choices: *id013
           default: onTrue
           name: When to Run
           validators: null
@@ -416,10 +480,10 @@ Properties:
       Number, validators: null, value: 2395}
   Export Subsystems: !!robotbuilder.data.properties.BooleanProperty {default: true,
     name: Export Subsystems, validators: null, value: true}
-  Wiring file location: !!robotbuilder.data.properties.FileProperty {default: /home/nyako/,
-    extension: null, folder: true, name: Wiring file location, validators: null, value: /home/nyako/Documents/BPA-Project/FRCMain2023/WiringFiles}
-  Export Directory: !!robotbuilder.data.properties.FileProperty {default: /home/nyako/FRCProjects,
-    extension: null, folder: true, name: Export Directory, validators: null, value: /home/nyako/Documents/BPA-Project}
+  Wiring file location: !!robotbuilder.data.properties.FileProperty {default: 'C:\Users\2395\',
+    extension: null, folder: true, name: Wiring file location, validators: null, value: 'C:\Users\2395\Documents\Github\FRC-Main-2023\WiringFiles'}
+  Export Directory: !!robotbuilder.data.properties.FileProperty {default: 'C:\Users\2395\FRCProjects',
+    extension: null, folder: true, name: Export Directory, validators: null, value: 'C:\Users\2395\Documents\Github'}
   Autonomous Command: !!robotbuilder.data.properties.TypeSelectionProperty {default: None,
     name: Autonomous Command, type: Command, validators: null, value: Autonomous Command}
 Base: Robot
