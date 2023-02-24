@@ -17,8 +17,8 @@
 #include <frc2/command/Command.h>
 
 #include "subsystems/DriveTrain.h"
-#include "subsystems/Lidar.h"
 #include "subsystems/Pnenumatics.h"
+#include "subsystems/Ultrasonic.h"
 
 #include "commands/ArmForward.h"
 #include "commands/ArmReverse.h"
@@ -40,7 +40,7 @@ public:
 // The robot's subsystems
 DriveTrain m_driveTrain;
 Pnenumatics m_pnenumatics;
-Lidar m_lidar;
+Ultrasonic m_ultrasonic;
 
 
 frc::XboxController* getXboxController();
