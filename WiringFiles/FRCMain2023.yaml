@@ -166,13 +166,13 @@ Children:
           default: '0'
           name: Forward Module (Solenoid)
           validators: *id005
-          value: '2'
+          value: '3'
         Reverse Channel (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
           choices: *id006
           default: '0'
           name: Reverse Channel (Solenoid)
           validators: null
-          value: '0'
+          value: '3'
         Forward Module Type (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
           choices: *id007
           default: CTREPCM
@@ -184,7 +184,7 @@ Children:
           default: '0'
           name: Forward Channel (Solenoid)
           validators: *id009
-          value: '3'
+          value: '2'
       Base: Double Solenoid
       Name: Arm2
     - Children: []
@@ -194,13 +194,13 @@ Children:
           default: '0'
           name: Forward Module (Solenoid)
           validators: *id005
-          value: '4'
+          value: '3'
         Reverse Channel (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
           choices: *id006
           default: '0'
           name: Reverse Channel (Solenoid)
           validators: null
-          value: '0'
+          value: '5'
         Forward Module Type (Solenoid): !!robotbuilder.data.properties.ChoicesProperty
           choices: *id007
           default: CTREPCM
@@ -212,7 +212,7 @@ Children:
           default: '0'
           name: Forward Channel (Solenoid)
           validators: *id009
-          value: '5'
+          value: '4'
       Base: Double Solenoid
       Name: Disco
     Properties:
