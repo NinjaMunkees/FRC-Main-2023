@@ -2,19 +2,19 @@
 
   //Drive
 
+    #include "rev/CANSparkMax.h"
     #include <frc/XboxController.h>
     #include <frc/drive/MecanumDrive.h>
-    #include <frc/motorcontrol/PWMSparkMax.h>
     #include <frc/motorcontrol/MotorControllerGroup.h>
 
-    frc::PWMSparkMax m_frontLeft1{0};
-    frc::PWMSparkMax m_frontLeft2{1};
-    frc::PWMSparkMax m_rearLeft1{2};
-    frc::PWMSparkMax m_rearLeft2{3};
-    frc::PWMSparkMax m_frontRight1{4};
-    frc::PWMSparkMax m_frontRight2{5};
-    frc::PWMSparkMax m_rearRight1{6};
-    frc::PWMSparkMax m_rearRight2{7};
+    rev::CANSparkMax m_frontLeft1{5, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax m_frontLeft2{6, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax m_rearLeft1{3, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax m_rearLeft2{4, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax m_frontRight1{9, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax m_frontRight2{10, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax m_rearRight1{7, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax m_rearRight2{8, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
 
     frc::MotorControllerGroup m_frontLeft{m_frontLeft1, m_frontLeft2};
     frc::MotorControllerGroup m_rearLeft{m_rearLeft1, m_rearLeft2};
@@ -35,6 +35,6 @@
 
     frc::Joystick btnBoard{1};
 
-    frc::DoubleSolenoid armShort{hubID, frc::PneumaticsModuleType::REVPH, 4, 5};
-    frc::DoubleSolenoid armLong{hubID, frc::PneumaticsModuleType::REVPH, 4, 5};
+    frc::DoubleSolenoid armShort{hubID, frc::PneumaticsModuleType::REVPH, 0, 1};
+    frc::DoubleSolenoid armLong{hubID, frc::PneumaticsModuleType::REVPH, 2, 3};
     frc::DoubleSolenoid disco{hubID, frc::PneumaticsModuleType::REVPH, 4, 5};

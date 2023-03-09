@@ -4,7 +4,7 @@
 
 #include <Robot.h>
 #include <frc/TimedRobot.h>
-
+#include <iostream>
 /**
  * This is a demo program showing how to use Mecanum control with the
  * MecanumDrive class.
@@ -68,7 +68,7 @@ class Robot : public frc::TimedRobot {
     /* Use the joystick X axis for forward movement, Y axis for lateral
      * movement, and Z axis for rotation.
      */
-    
+
     if (btnBoard.GetRawButtonPressed(1)) {SendArm(1);}
     else if (btnBoard.GetRawButtonPressed(2)) {SendArm(2);}
     else if (btnBoard.GetRawButtonPressed(3)) {SendArm(3);}
@@ -77,7 +77,11 @@ class Robot : public frc::TimedRobot {
     if (btnBoard.GetRawButtonPressed(5)) {sendDisco(0);}
     else if (btnBoard.GetRawButtonPressed(6)) {sendDisco(1);}
 
-    m_robotDrive.DriveCartesian(-m_xboxControl.GetLeftY(), -m_xboxControl.GetLeftX(), -m_xboxControl.GetRightX());
+    double x1 = m_xboxControl.GetLeftX();
+    double y1 = m_xboxControl.GetLeftY();
+    double x2 = m_xboxControl.GetRightX();
+    //std::cout << "Drive x1:" << x1 << " y1:" << y1 << " x2:" << x2 << std::endl;
+    m_robotDrive.DriveCartesian(-y1, -x1, x2);
   }
 };
 
