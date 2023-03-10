@@ -33,4 +33,4 @@
 
     double leftX, leftY, rightX;
     const double deadzone = 0.175;
-    const double accelRate = 2;
+    const double accelRate = 1.35;
