@@ -77,11 +77,18 @@ class Robot : public frc::TimedRobot {
     if (btnBoard.GetRawButtonPressed(5)) {sendDisco(0);}
     else if (btnBoard.GetRawButtonPressed(6)) {sendDisco(1);}
 
-    double x1 = m_xboxControl.GetLeftX();
-    double y1 = m_xboxControl.GetLeftY();
-    double x2 = m_xboxControl.GetRightX();
+    double leftXRaw = m_xboxControl.GetLeftX();
+    double leftYRaw = m_xboxControl.GetLeftY();
+    double rightXRaw = m_xboxControl.GetRightX();
+
     //std::cout << "Drive x1:" << x1 << " y1:" << y1 << " x2:" << x2 << std::endl;
-    m_robotDrive.DriveCartesian(-y1, -x1, x2);
+
+
+    if(fabs(leftXRaw) < deadzone) {leftX = 0;} else{leftX = leftXRaw;}
+    if(fabs(leftYRaw) < deadzone) {leftY = 0;} else {leftY = leftYRaw;}
+    if(fabs(rightXRaw) < deadzone) {rightX = 0;} else {rightX = rightXRaw;}
+
+    m_robotDrive.DriveCartesian(-leftY, -leftX, rightX);
   }
 };
 

@@ -1,5 +1,6 @@
-  static constexpr int kJoystickChannel = 0;
-
+  #include <iostream>
+  #include <string>
+  
   //Drive
 
     #include "rev/CANSparkMax.h"
@@ -25,13 +26,16 @@
 
     frc::XboxController m_xboxControl{0};
 
+    double leftX, leftY, rightX;
+    double deadzone = 0.15;
+
   //Pneumatics
 
     #include <frc/PneumaticHub.h>
     #include <frc/DoubleSolenoid.h>
     #include <frc/Joystick.h>
 
-    int hubID = 3;
+    int hubID = 2;
 
     frc::Joystick btnBoard{1};
 
