@@ -19,9 +19,6 @@
     rev::SparkMaxRelativeEncoder m_frontLeftEncoder = m_frontLeft1.GetEncoder();
     rev::SparkMaxRelativeEncoder m_rearLeftEncoder = m_rearLeft1.GetEncoder();
 
-    double m_rightEncoder;
-    double m_leftEncoder;
-
     frc::MotorControllerGroup m_frontLeft{m_frontLeft1, m_frontLeft2};
     frc::MotorControllerGroup m_rearLeft{m_rearLeft1, m_rearLeft2};
     frc::MotorControllerGroup m_frontRight{m_frontRight1, m_frontRight2};

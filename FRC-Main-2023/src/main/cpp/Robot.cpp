@@ -10,11 +10,42 @@
 
 #define PUT_NUMBER frc::SmartDashboard::SmartDashboard::PutNumber
 
+// Debug Preprocessor
+#define DEBUG
+//End
+
 class Robot : public frc::TimedRobot {
  public:
 
-  void SendRobot(int desiredPosition){
-    //WIP
+   void RobotInit() override {
+    m_frontRight.SetInverted(true);
+    m_rearRight.SetInverted(true);
+
+    m_rearLeft1.SetOpenLoopRampRate(accelRate);
+    m_rearLeft2.SetOpenLoopRampRate(accelRate);
+    m_frontLeft1.SetOpenLoopRampRate(accelRate);
+    m_frontLeft2.SetOpenLoopRampRate(accelRate);
+    m_rearRight1.SetOpenLoopRampRate(accelRate);
+    m_rearRight2.SetOpenLoopRampRate(accelRate);
+    m_frontRight1.SetOpenLoopRampRate(accelRate);
+    m_frontRight2.SetOpenLoopRampRate(accelRate);
+
+    sendDisco(0);
+    SendArm(0);
+  }
+
+  void RobotPeriodic() override {
+    frc::SmartDashboard::SmartDashboard::PutNumber("Front Left Encoder", m_frontLeftEncoder.GetPosition());
+    frc::SmartDashboard::SmartDashboard::PutNumber("Rear Left Encoder", m_rearLeftEncoder.GetPosition());
+    frc::SmartDashboard::SmartDashboard::PutNumber("Front Right Encoder", m_frontRightEncoder.GetPosition());
+    frc::SmartDashboard::SmartDashboard::PutNumber("Rear Right Encoder", m_rearRightEncoder.GetPosition());
+
+    double m_rightEncoder = (m_rearRightEncoder.GetPosition() + m_frontRightEncoder.GetPosition()) / 2;
+    double m_leftEncoder = (m_rearLeftEncoder.GetPosition() + m_frontLeftEncoder.GetPosition()) / 2;
+
+    #ifdef DEBUG
+      std::cout << "Right Encoder: " << m_rightEncoder << " Left Encoder: " << m_leftEncoder << std::endl;
+    #endif
   }
 
   void SendArm(int armPos){
@@ -62,33 +93,6 @@ class Robot : public frc::TimedRobot {
     }
   }
 
-  void RobotInit() override {
-    m_frontRight.SetInverted(true);
-    m_rearRight.SetInverted(true);
-
-    m_rearLeft1.SetOpenLoopRampRate(accelRate);
-    m_rearLeft2.SetOpenLoopRampRate(accelRate);
-    m_frontLeft1.SetOpenLoopRampRate(accelRate);
-    m_frontLeft2.SetOpenLoopRampRate(accelRate);
-    m_rearRight1.SetOpenLoopRampRate(accelRate);
-    m_rearRight2.SetOpenLoopRampRate(accelRate);
-    m_frontRight1.SetOpenLoopRampRate(accelRate);
-    m_frontRight2.SetOpenLoopRampRate(accelRate);
-
-    sendDisco(0);
-    SendArm(0);
-  }
-
-  void RobotPeriodic() override {
-    PUT_NUMBER("Front Left Encoder", m_frontLeftEncoder.GetPosition());
-    PUT_NUMBER("Rear Left Encoder", m_rearLeftEncoder.GetPosition());
-    PUT_NUMBER("Front Right Encoder", m_frontRightEncoder.GetPosition());
-    PUT_NUMBER("Rear Right Encoder", m_rearRightEncoder.GetPosition());
-
-    m_rightEncoder = (m_rearRightEncoder.GetPosition() * m_frontRightEncoder.GetPosition() / 2);
-    m_leftEncoder = (m_rearLeftEncoder.GetPosition() * m_frontLeftEncoder.GetPosition() / 2);
-  }
-
   void AutonomousInit() override {
     m_frontLeftEncoder.SetPosition(0);
     m_rearLeftEncoder.SetPosition(0);
@@ -97,7 +101,11 @@ class Robot : public frc::TimedRobot {
   }
 
   void AutonomousPeriodic() override {
-    SendRobot(45);
+    if (fabs(m_rearRightEncoder.GetPosition()) < 16
+    )
+    {
+      m_robotDrive.DriveCartesian(-0.2, 0, 0);
+    }
   }
 
   void TeleopPeriodic() override {
