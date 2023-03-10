@@ -45,11 +45,11 @@ class Robot : public frc::TimedRobot {
     switch (discoPos)
     {
     case 0:
-      disco.Set(frc::DoubleSolenoid::Value::kForward);
+      disco.Set(frc::DoubleSolenoid::Value::kReverse);
       break;
     
     case 1:
-      disco.Set(frc::DoubleSolenoid::Value::kReverse);
+      disco.Set(frc::DoubleSolenoid::Value::kForward);
       break;
     
     default:
@@ -62,6 +62,9 @@ class Robot : public frc::TimedRobot {
     // match your robot.
     m_frontRight.SetInverted(true);
     m_rearRight.SetInverted(true);
+
+    sendDisco(0);
+    SendArm(0);
   }
 
   void TeleopPeriodic() override {
