@@ -5,10 +5,7 @@
 #include <Robot.h>
 #include <frc/TimedRobot.h>
 #include <iostream>
-/**
- * This is a demo program showing how to use Mecanum control with the
- * MecanumDrive class.
- */
+
 class Robot : public frc::TimedRobot {
  public:
 
@@ -58,8 +55,6 @@ class Robot : public frc::TimedRobot {
   }
 
   void RobotInit() override {
-    // Invert the right side motors. You may need to change or remove this to
-    // match your robot.
     m_frontRight.SetInverted(true);
     m_rearRight.SetInverted(true);
 
@@ -67,10 +62,15 @@ class Robot : public frc::TimedRobot {
     SendArm(0);
   }
 
+  void AutonomousInit() override {
+    
+  }
+
+  void AutonomousPeriodic() override {
+
+  }
+
   void TeleopPeriodic() override {
-    /* Use the joystick X axis for forward movement, Y axis for lateral
-     * movement, and Z axis for rotation.
-     */
 
     if (btnBoard.GetRawButtonPressed(1)) {SendArm(1);}
     else if (btnBoard.GetRawButtonPressed(2)) {SendArm(2);}
@@ -83,9 +83,6 @@ class Robot : public frc::TimedRobot {
     double leftXRaw = m_xboxControl.GetLeftX();
     double leftYRaw = m_xboxControl.GetLeftY();
     double rightXRaw = m_xboxControl.GetRightX();
-
-    //std::cout << "Drive x1:" << x1 << " y1:" << y1 << " x2:" << x2 << std::endl;
-
 
     if(fabs(leftXRaw) < deadzone) {leftX = 0;} else{leftX = leftXRaw;}
     if(fabs(leftYRaw) < deadzone) {leftY = 0;} else {leftY = leftYRaw;}
