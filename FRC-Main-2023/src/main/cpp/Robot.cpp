@@ -101,7 +101,7 @@ class Robot : public frc::TimedRobot {
   }
 
   void AutonomousPeriodic() override {
-    if (fabs(m_rearRightEncoder.GetPosition()) < 20
+    if (fabs(m_rearRightEncoder.GetPosition()) < 30
     )
     {
       m_robotDrive.DriveCartesian(-0.2, 0, 0);
