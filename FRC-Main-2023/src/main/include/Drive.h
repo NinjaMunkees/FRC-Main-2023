@@ -1,4 +1,5 @@
     #include "rev/CANSparkMax.h"
+    #include "rev/SparkMaxRelativeEncoder.h"
     #include <frc/XboxController.h>
     #include <frc/drive/MecanumDrive.h>
     #include <frc/motorcontrol/MotorControllerGroup.h>
@@ -13,6 +14,14 @@
     rev::CANSparkMax m_rearRight1{7, MOTOR_BRUSHLESS};
     rev::CANSparkMax m_rearRight2{8, MOTOR_BRUSHLESS};
 
+    rev::SparkMaxRelativeEncoder m_frontRightEncoder = m_frontRight1.GetEncoder();
+    rev::SparkMaxRelativeEncoder m_rearRightEncoder = m_rearRight1.GetEncoder();
+    rev::SparkMaxRelativeEncoder m_frontLeftEncoder = m_frontLeft1.GetEncoder();
+    rev::SparkMaxRelativeEncoder m_rearLeftEncoder = m_rearLeft1.GetEncoder();
+
+    double m_rightEncoder;
+    double m_leftEncoder;
+
     frc::MotorControllerGroup m_frontLeft{m_frontLeft1, m_frontLeft2};
     frc::MotorControllerGroup m_rearLeft{m_rearLeft1, m_rearLeft2};
     frc::MotorControllerGroup m_frontRight{m_frontRight1, m_frontRight2};
@@ -23,4 +32,5 @@
     frc::XboxController m_xboxControl{0};
 
     double leftX, leftY, rightX;
-    double deadzone = 0.15;
+    const double deadzone = 0.175;
+    const double accelRate = 2;
