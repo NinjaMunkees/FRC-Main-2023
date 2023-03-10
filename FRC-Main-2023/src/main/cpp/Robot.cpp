@@ -101,11 +101,12 @@ class Robot : public frc::TimedRobot {
   }
 
   void AutonomousPeriodic() override {
-    if (fabs(m_rearRightEncoder.GetPosition()) < 16
+    if (fabs(m_rearRightEncoder.GetPosition()) < 20
     )
     {
       m_robotDrive.DriveCartesian(-0.2, 0, 0);
     }
+    else{m_robotDrive.DriveCartesian(-0, 0, 0);}
   }
 
   void TeleopPeriodic() override {
