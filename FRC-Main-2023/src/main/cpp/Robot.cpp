@@ -4,6 +4,7 @@
 
 #include <Robot.h>
 #include <Drive.h>
+#include <Location.h>
 #include <Pneumatics.h>
 #include <frc/TimedRobot.h>
 #include <iostream>
@@ -20,6 +21,9 @@ class Robot : public frc::TimedRobot {
    void RobotInit() override {
     m_frontRight.SetInverted(true);
     m_rearRight.SetInverted(true);
+
+    ctre::phoenix::sensors::Pigeon2 pigeon(0);
+    AHRS navx{frc::I2C::Port::kMXP};
 
     m_rearLeft1.SetOpenLoopRampRate(accelRate);
     m_rearLeft2.SetOpenLoopRampRate(accelRate);
