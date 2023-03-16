@@ -3,4 +3,4 @@
 #include "stdio.h"
 
 float balanceRate = 0.1;
-float  balanceThresh;
+float  balanceThresh = 12;

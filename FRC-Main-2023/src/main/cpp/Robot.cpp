@@ -56,8 +56,8 @@ class Robot : public frc::TimedRobot {
   void Balance(){
     float gyroX = ahrs->GetRawGyroX();
     float gyroY = ahrs->GetRawGyroY();
-    leftX = gyroX * balanceRate;
-    leftY = gyroY * balanceRate;
+    if(gyroX > balanceThresh){leftX = gyroX * balanceRate;}
+    if(gyroY <balanceThresh){leftY = gyroY * balanceRate;}
   }
 
   void AutonomousInit() override {
