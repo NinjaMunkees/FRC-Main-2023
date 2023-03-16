@@ -10,3 +10,6 @@ frc::Joystick btnBoard{1};
 frc::DoubleSolenoid armShort{hubID, REV_PNEUMATICS, 0, 1}; 
 frc::DoubleSolenoid armLong{hubID, REV_PNEUMATICS, 2, 3};
 frc::DoubleSolenoid disco{hubID, REV_PNEUMATICS, 4, 5};
+
+void SendDisco(int discoPos);
+void SendArm(int armPos);

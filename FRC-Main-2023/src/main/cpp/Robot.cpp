@@ -4,8 +4,8 @@
 
 #include <Robot.h>
 #include <Drive.h>
-#include <Location.h>
-#include <Pneumatics.h>
+#include <Balance.h>
+#include <Arm.h>
 #include <frc/TimedRobot.h>
 #include <iostream>
 
@@ -18,12 +18,11 @@
 class Robot : public frc::TimedRobot {
  public:
 
+  AHRS *ahrs;
+
    void RobotInit() override {
     m_frontRight.SetInverted(true);
     m_rearRight.SetInverted(true);
-
-    ctre::phoenix::sensors::Pigeon2 pigeon(0);
-    AHRS navx{frc::I2C::Port::kMXP};
 
     m_rearLeft1.SetOpenLoopRampRate(accelRate);
     m_rearLeft2.SetOpenLoopRampRate(accelRate);
@@ -34,8 +33,10 @@ class Robot : public frc::TimedRobot {
     m_frontRight1.SetOpenLoopRampRate(accelRate);
     m_frontRight2.SetOpenLoopRampRate(accelRate);
 
-    sendDisco(0);
+    SendDisco(0);
     SendArm(0);
+
+    AHRS ahrs{frc::SPI::Port::kMXP};
   }
 
   void RobotPeriodic() override {
@@ -52,49 +53,11 @@ class Robot : public frc::TimedRobot {
     #endif
   }
 
-  void SendArm(int armPos){
-    switch (armPos)
-    {
-    case 1:
-      armShort.Set(frc::DoubleSolenoid::Value::kReverse);
-      armLong.Set(frc::DoubleSolenoid::Value::kReverse);
-      disco.Set(frc::DoubleSolenoid::Value::kReverse);
-      break;
-
-    case 2:
-      armShort.Set(frc::DoubleSolenoid::Value::kForward);
-      armLong.Set(frc::DoubleSolenoid::Value::kReverse);
-      break;
-
-    case 3:
-      armShort.Set(frc::DoubleSolenoid::Value::kReverse);
-      armLong.Set(frc::DoubleSolenoid::Value::kForward);
-      break;
-
-    case 4:
-      armShort.Set(frc::DoubleSolenoid::Value::kForward);
-      armLong.Set(frc::DoubleSolenoid::Value::kForward);
-      break;
-    
-    default:
-      break;
-    }
-  }
-
-  void sendDisco(int discoPos){
-    switch (discoPos)
-    {
-    case 0:
-      disco.Set(frc::DoubleSolenoid::Value::kReverse);
-      break;
-    
-    case 1:
-      disco.Set(frc::DoubleSolenoid::Value::kForward);
-      break;
-    
-    default:
-      break;
-    }
+  void Balance(){
+    float gyroX = ahrs->GetRawGyroX();
+    float gyroY = ahrs->GetRawGyroY();
+    leftX = gyroX * balanceRate;
+    leftY = gyroY * balanceRate;
   }
 
   void AutonomousInit() override {
@@ -115,13 +78,13 @@ class Robot : public frc::TimedRobot {
 
   void TeleopPeriodic() override {
 
-    if (btnBoard.GetRawButtonPressed(1)) {SendArm(1);}
+    if (btnBoard.GetRawButtonPressed(1)) { SendArm(1);}
     else if (btnBoard.GetRawButtonPressed(2)) {SendArm(2);}
     else if (btnBoard.GetRawButtonPressed(3)) {SendArm(3);}
     else if (btnBoard.GetRawButtonPressed(4)) {SendArm(4);}
 
-    if (btnBoard.GetRawButtonPressed(5)) {sendDisco(0);}
-    else if (btnBoard.GetRawButtonPressed(6)) {sendDisco(1);}
+    if (btnBoard.GetRawButtonPressed(5)) {SendDisco(0);}
+    else if (btnBoard.GetRawButtonPressed(6)) {SendDisco(1);}
 
     double leftXRaw = m_xboxControl.GetLeftX();
     double leftYRaw = m_xboxControl.GetLeftY();
