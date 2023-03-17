@@ -4,3 +4,4 @@
 
 float balanceRate = 0.1;
 float  balanceThresh = 12;
+bool balance;
