@@ -39,6 +39,51 @@ class Robot : public frc::TimedRobot {
     AHRS ahrs{frc::SPI::Port::kMXP};
   }
 
+  void SendArm(int armPos){
+    switch (armPos)
+    {
+    case 1:
+      armShort.Set(frc::DoubleSolenoid::Value::kReverse);
+      armLong.Set(frc::DoubleSolenoid::Value::kReverse);
+      disco.Set(frc::DoubleSolenoid::Value::kReverse);
+      break;
+
+    case 2:
+      armShort.Set(frc::DoubleSolenoid::Value::kForward);
+      armLong.Set(frc::DoubleSolenoid::Value::kReverse);
+      break;
+
+    case 3:
+      armShort.Set(frc::DoubleSolenoid::Value::kReverse);
+      armLong.Set(frc::DoubleSolenoid::Value::kForward);
+      break;
+
+    case 4:
+      armShort.Set(frc::DoubleSolenoid::Value::kForward);
+      armLong.Set(frc::DoubleSolenoid::Value::kForward);
+      break;
+    
+    default:
+      break;
+    }
+  }
+
+  void SendDisco(int discoPos){
+    switch (discoPos)
+    {
+    case 0:
+      disco.Set(frc::DoubleSolenoid::Value::kReverse);
+      break;
+    
+    case 1:
+      disco.Set(frc::DoubleSolenoid::Value::kForward);
+      break;
+    
+    default:
+      break;
+    }
+  }
+
   void RobotPeriodic() override {
     frc::SmartDashboard::SmartDashboard::PutNumber("Front Left Encoder", m_frontLeftEncoder.GetPosition());
     frc::SmartDashboard::SmartDashboard::PutNumber("Rear Left Encoder", m_rearLeftEncoder.GetPosition());
@@ -56,11 +101,8 @@ class Robot : public frc::TimedRobot {
   void Balance(){
     float gyroX = ahrs->GetRawGyroX();
     float gyroY = ahrs->GetRawGyroY();
-    if (balance)
-    {
-      if(gyroX > balanceThresh){leftX = gyroX * balanceRate;}
-      if(gyroY < balanceThresh){leftY = gyroY * balanceRate;}
-    }
+    leftX = gyroX * balanceRate;
+    leftY = gyroY * balanceRate;
   }
 
   void AutonomousInit() override {
@@ -71,7 +113,8 @@ class Robot : public frc::TimedRobot {
   }
 
   void AutonomousPeriodic() override {
-    if (fabs(m_rearRightEncoder.GetPosition()) < 30)
+    if (fabs(m_rearRightEncoder.GetPosition()) < 30
+    )
     {
       m_robotDrive.DriveCartesian(-0.2, 0, 0);
     }
@@ -79,6 +122,7 @@ class Robot : public frc::TimedRobot {
   }
 
   void TeleopPeriodic() override {
+
     if (btnBoard.GetRawButtonPressed(1)) { SendArm(1);}
     else if (btnBoard.GetRawButtonPressed(2)) {SendArm(2);}
     else if (btnBoard.GetRawButtonPressed(3)) {SendArm(3);}
@@ -87,8 +131,6 @@ class Robot : public frc::TimedRobot {
     if (btnBoard.GetRawButtonPressed(5)) {SendDisco(0);}
     else if (btnBoard.GetRawButtonPressed(6)) {SendDisco(1);}
 
-    if(btnBoard.GetRawButtonPressed(7)){balance = !balance;}
-
     double leftXRaw = m_xboxControl.GetLeftX();
     double leftYRaw = m_xboxControl.GetLeftY();
     double rightXRaw = m_xboxControl.GetRightX();
@@ -96,8 +138,6 @@ class Robot : public frc::TimedRobot {
     if(fabs(leftXRaw) < deadzone) {leftX = 0;} else{leftX = leftXRaw / 2;}
     if(fabs(leftYRaw) < deadzone) {leftY = 0;} else {leftY = leftYRaw / 2;}
     if(fabs(rightXRaw) < deadzone) {rightX = 0;} else {rightX = rightXRaw / 2;}
-
-    Balance();
 
     m_robotDrive.DriveCartesian(-leftY, -leftX, rightX);
   }
