@@ -1,15 +1,18 @@
-#include <frc/PneumaticHub.h>
-#include <frc/DoubleSolenoid.h>
 #include <frc/Joystick.h>
-#define REV_PNEUMATICS frc::PneumaticsModuleType::REVPH
+#include "rev/CANSparkMax.h"
+#include "rev/SparkMaxRelativeEncoder.h"
+#define MOTOR_BRUSHLESS rev::CANSparkMaxLowLevel::MotorType::kBrushless
 
-int hubID = 2;
+double armSpeed = 0.1;
+double rollerSpeed = 0.1;
 
 frc::Joystick btnBoard{1};
 
-frc::DoubleSolenoid armShort{hubID, REV_PNEUMATICS, 0, 1}; 
-frc::DoubleSolenoid armLong{hubID, REV_PNEUMATICS, 2, 3};
-frc::DoubleSolenoid disco{hubID, REV_PNEUMATICS, 4, 5};
+rev::CANSparkMax m_armMotor{11, MOTOR_BRUSHLESS};
+rev::CANSparkMax m_rollerMotor{12, MOTOR_BRUSHLESS};
+
+rev::SparkMaxRelativeEncoder m_armEncoder = m_armMotor.GetEncoder();
+rev::SparkMaxRelativeEncoder m_rollerEncoder = m_rollerMotor.GetEncoder();
 
 void SendDisco(int discoPos);
 void SendArm(int armPos);

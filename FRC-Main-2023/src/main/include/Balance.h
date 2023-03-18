@@ -1,7 +1,8 @@
 #include <frc/SPI.h>
-#include "AHRS.h"
-#include "stdio.h"
+#include <ctre/phoenix/sensors/Pigeon2.h>
 
-float balanceRate = 0.1;
-float  balanceThresh = 12;
+ctre::phoenix::sensors::Pigeon2 pigeon{11};
+
+float balanceRate = 0.5;
+float balanceThresh = 5;
 bool balance;
