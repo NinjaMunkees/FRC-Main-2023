@@ -122,7 +122,7 @@ class Robot : public frc::TimedRobot {
     double rollAngleDegrees   = 0;
 
     if (balance){
-      leftY = -usablePitch / 3;
+      leftY = -usablePitch / 2.5;
     }
     else{
       if(fabs(leftXRaw) < deadzone) {leftX = 0;} else{leftX = leftXRaw / 2;}
