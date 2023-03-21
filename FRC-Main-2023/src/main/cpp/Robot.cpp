@@ -31,8 +31,6 @@ class Robot : public frc::TimedRobot {
     m_frontRight1.SetOpenLoopRampRate(accelRate);
     m_frontRight2.SetOpenLoopRampRate(accelRate);
 
-    pigeon.Calibrate();
-
     SendDisco(0);
     SendArm(0);
   }
@@ -84,9 +82,6 @@ class Robot : public frc::TimedRobot {
     PUT_NUMBER("pitch", pigeon.GetPitch());
     PUT_NUMBER("roll", pigeon.GetRoll());
 
-    #ifdef DEBUG
-      std::cout << "Right Encoder: " << m_rightEncoder << " Left Encoder: " << m_leftEncoder << std::endl;
-    #endif
   }
 
   void AutonomousInit() override {
@@ -122,20 +117,20 @@ class Robot : public frc::TimedRobot {
     double rightXRaw = m_xboxControl.GetRightX();
 
     double pitchAngleDegrees  = pigeon.GetPitch();
-    double rollAngleDegrees   = pigeon.GetRoll();
+    double usablePitch = pitchAngleDegrees * balanceRate / 60;
+    PUT_NUMBER("GOODPITCH", usablePitch);
+    double rollAngleDegrees   = 0;
 
     if (balance){
-      if (rollAngleDegrees > balanceThresh)
-      {leftX = rollAngleDegrees * balanceRate;}
-
-      if (pitchAngleDegrees > balanceThresh)  
-      {leftY = pitchAngleDegrees * balanceRate;}
+      leftY = -usablePitch / 3;
     }
     else{
       if(fabs(leftXRaw) < deadzone) {leftX = 0;} else{leftX = leftXRaw / 2;}
       if(fabs(leftYRaw) < deadzone) {leftY = 0;} else {leftY = leftYRaw / 2;}
       if(fabs(rightXRaw) < deadzone) {rightX = 0;} else {rightX = rightXRaw / 2;}
     }
+
+    PUT_NUMBER("LEFTY", -leftY);
     
     m_robotDrive.DriveCartesian(-leftY, -leftX, rightX);
   }
