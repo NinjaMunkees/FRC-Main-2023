@@ -19,6 +19,14 @@ class Robot : public frc::TimedRobot {
  public:
 
    void RobotInit() override {
+    m_autoSelected = m_chooser.GetSelected();
+    fmt::print("Auto selected: {}\n", m_autoSelected);
+
+    m_chooser.SetDefaultOption(kAutoBalance, kAutoBalance);
+    m_chooser.AddOption(kAutoStraight, kAutoStraight);
+    m_chooser.AddOption(kAutoPark, kAutoPark);
+    frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+
     m_frontRight.SetInverted(true);
     m_rearRight.SetInverted(true);
 
@@ -71,13 +79,19 @@ class Robot : public frc::TimedRobot {
     frc::SmartDashboard::SmartDashboard::PutNumber("Front Right Encoder", m_frontRightEncoder.GetPosition());
     frc::SmartDashboard::SmartDashboard::PutNumber("Rear Right Encoder", m_rearRightEncoder.GetPosition());
 
-    double m_rightEncoder = (m_rearRightEncoder.GetPosition() + m_frontRightEncoder.GetPosition()) / 2;
-    double m_leftEncoder = (m_rearLeftEncoder.GetPosition() + m_frontLeftEncoder.GetPosition()) / 2;
+    m_rightEncoder = (m_rearRightEncoder.GetPosition() + m_frontRightEncoder.GetPosition()) / 2;
+    m_leftEncoder = (m_rearLeftEncoder.GetPosition() + m_frontLeftEncoder.GetPosition()) / 2;
 
-    PUT_NUMBER("yaw", pigeon.GetYaw());
-    PUT_NUMBER("pitch", pigeon.GetPitch());
-    PUT_NUMBER("roll", pigeon.GetRoll());
+    pitch = pigeon.GetPitch();
+    yaw = pigeon.GetYaw();
+    roll = pigeon.GetRoll();
 
+    goodPitch = pitch * balanceRate / 60;
+    PUT_NUMBER("Good Pitch", goodPitch);
+
+    PUT_NUMBER("yaw", yaw);
+    PUT_NUMBER("pitch", pitch);
+    PUT_NUMBER("roll", roll);
   }
 
   void AutonomousInit() override {
@@ -85,14 +99,52 @@ class Robot : public frc::TimedRobot {
     m_rearLeftEncoder.SetPosition(0);
     m_frontRightEncoder.SetPosition(0);
     m_rearRightEncoder.SetPosition(0); 
+
+    balance = false;
+
+    if (m_autoSelected == kAutoBalance) {
+
+    }
+    else if (m_autoSelected == kAutoStraight)
+    {
+
+    }
+    else if (m_autoSelected == kAutoPark)
+    {
+
+    }
   }
 
   void AutonomousPeriodic() override {
-    if (fabs(m_rearRightEncoder.GetPosition()) < 30)
-    {
-      m_robotDrive.DriveCartesian(-0.2, 0, 0);
+
+    if (m_autoSelected == kAutoBalance) {
+
+      if (m_rearLeftEncoder.GetPosition() < desiredPos && m_frontRightEncoder.GetPosition() < desiredPos)
+      {
+        leftYRaw = autoSpeedY;
+      }
+      else{balance = true;}
+      
+      if (balance)
+      {
+        leftY = -goodPitch / 2.5;
+      }
+      else{leftY = leftYRaw;}
+      
+      m_robotDrive.DriveCartesian(-leftY, -leftX, rightX);
     }
-    else{m_robotDrive.DriveCartesian(-0, 0, 0);}
+    else if (m_autoSelected == kAutoStraight)
+    {
+      if (fabs(m_rearRightEncoder.GetPosition()) < 30)
+      {
+       m_robotDrive.DriveCartesian(-0.2, 0, 0);
+      }
+      else{m_robotDrive.DriveCartesian(-0, 0, 0);}       
+    }
+    else if (m_autoSelected == kAutoPark)
+    {
+      m_robotDrive.DriveCartesian(-0, 0, 0);
+    }
   }
 
   void TeleopPeriodic() override {
@@ -108,17 +160,12 @@ class Robot : public frc::TimedRobot {
     if (m_xboxControl.GetAButtonPressed())
     {balance = !balance;}
 
-    double leftXRaw = m_xboxControl.GetLeftX();
-    double leftYRaw = m_xboxControl.GetLeftY();
-    double rightXRaw = m_xboxControl.GetRightX();
-
-    double pitchAngleDegrees  = pigeon.GetPitch();
-    double usablePitch = pitchAngleDegrees * balanceRate / 60;
-    PUT_NUMBER("GOODPITCH", usablePitch);
-    double rollAngleDegrees   = 0;
+    leftXRaw = m_xboxControl.GetLeftX();
+    leftYRaw = m_xboxControl.GetLeftY();
+    rightXRaw = m_xboxControl.GetRightX();
 
     if (balance){
-      leftY = -usablePitch / 2.5;
+      leftY = -goodPitch / 2.5;
     }
     else{
       if(fabs(leftXRaw) < deadzone) {leftX = 0;} else{leftX = leftXRaw / 2;}
