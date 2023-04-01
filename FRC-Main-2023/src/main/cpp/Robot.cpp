@@ -22,14 +22,10 @@ class Robot : public frc::TimedRobot {
     m_frontRight.SetInverted(true);
     m_rearRight.SetInverted(true);
 
-    m_rearLeft1.SetOpenLoopRampRate(accelRate);
-    m_rearLeft2.SetOpenLoopRampRate(accelRate);
-    m_frontLeft1.SetOpenLoopRampRate(accelRate);
-    m_frontLeft2.SetOpenLoopRampRate(accelRate);
-    m_rearRight1.SetOpenLoopRampRate(accelRate);
-    m_rearRight2.SetOpenLoopRampRate(accelRate);
-    m_frontRight1.SetOpenLoopRampRate(accelRate);
-    m_frontRight2.SetOpenLoopRampRate(accelRate);
+    m_rearLeft.SetOpenLoopRampRate(accelRate);
+    m_frontLeft.SetOpenLoopRampRate(accelRate);
+    m_rearRight.SetOpenLoopRampRate(accelRate);
+    m_frontRight.SetOpenLoopRampRate(accelRate);
 
     SendDisco(0);
     SendArm(0);
