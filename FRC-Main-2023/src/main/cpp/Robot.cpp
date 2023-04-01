@@ -27,6 +27,8 @@ class Robot : public frc::TimedRobot {
     m_chooser.AddOption(kAutoPark, kAutoPark);
     frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
+    m_armMotor = new TalonFX(6);
+
     m_frontRight.SetInverted(true);
     m_rearRight.SetInverted(true);
 
@@ -59,19 +61,8 @@ class Robot : public frc::TimedRobot {
     }
   }
 
-  void SendDisco(int discoPos){
-    switch (discoPos)
-    {
-    case 0:
-      break;
-    
-    case 1:
-      break;
-    
-    default:
-      break;
-    }
-  }
+  void SendRoller(int rollerPolarity){
+    rollerTimer.Stop();m_rollerMotor
 
   void RobotPeriodic() override {
     frc::SmartDashboard::SmartDashboard::PutNumber("Front Left Encoder", m_frontLeftEncoder.GetPosition());
@@ -101,18 +92,6 @@ class Robot : public frc::TimedRobot {
     m_rearRightEncoder.SetPosition(0); 
 
     balance = false;
-
-    if (m_autoSelected == kAutoBalance) {
-
-    }
-    else if (m_autoSelected == kAutoStraight)
-    {
-
-    }
-    else if (m_autoSelected == kAutoPark)
-    {
-
-    }
   }
 
   void AutonomousPeriodic() override {
@@ -154,8 +133,14 @@ class Robot : public frc::TimedRobot {
     else if (btnBoard.GetRawButtonPressed(3)) {SendArm(3);}
     else if (btnBoard.GetRawButtonPressed(4)) {SendArm(4);}
 
-    if (btnBoard.GetRawButtonPressed(5)) {m_rollerMotor.Set(rollerSpeed);}
-    else if (btnBoard.GetRawButtonPressed(6)) {m_rollerMotor.Set(rollerSpeed);}
+    if (btnBoard.GetRawButtonPressed(5)) {m_armMotor->Set(ControlMode::PercentOutput, 0.125);}
+    else if (btnBoard.GetRawButtonPressed(6)) {m_armMotor->Set(ControlMode::PercentOutput, -0.125);}
+
+    if (btnBoard.GetRawButtonPressed(7)) {SendRoller(0);}
+    else if (btnBoard.GetRawButtonPressed(8)) {SendRoller(1);}
+
+    if (btnBoard.GetRawButtonPressed(9)) {m_rollerMotor.Set(rollerSpeed);}
+    else if (btnBoard.GetRawButtonPressed(10)) {m_rollerMotor.Set(rollerSpeed);}
 
     if (m_xboxControl.GetAButtonPressed())
     {balance = !balance;}
@@ -183,4 +168,4 @@ class Robot : public frc::TimedRobot {
 int main() {
   return frc::StartRobot<Robot>();
 }
-#endif
+#endif (btnBoard.GetRawButtonPressed(5)) {m_armMotor->Set(ControlMode::PercentOutput, 0.125);}if (btnBoard.GetRawButtonPressed(5)) {m_armMotor->Set(ControlMode::PercentOutput, 0.125);}
