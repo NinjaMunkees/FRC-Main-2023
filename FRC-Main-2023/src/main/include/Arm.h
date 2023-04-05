@@ -10,9 +10,8 @@ double rollerSpeed = 0.1;
 frc::Joystick btnBoard{1};
 
 TalonFX * m_armMotor;
-rev::CANSparkMax m_rollerMotor{7, MOTOR_BRUSHLESS};
+rev::CANSparkMax m_rollerMotor{12, MOTOR_BRUSHLESS};
 
-void SendDisco(int discoPos);
 void SendArm(int armPos);
 
 frc::Timer rollerTimer;

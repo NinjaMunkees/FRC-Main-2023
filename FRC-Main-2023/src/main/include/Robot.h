@@ -1,8 +1,16 @@
 #include <string>
+#include <cstdio>
+#include <thread>
 #include <iostream>
 #include <frc/TimedRobot.h>
+#include <cameraserver/CameraServer.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/core/types.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/SendableChooser.h>
+
+
 
 //Auto
 
