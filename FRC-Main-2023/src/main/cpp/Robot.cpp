@@ -35,6 +35,7 @@ class Robot : public frc::TimedRobot {
    void RobotInit() override {
     m_autoSelected = m_chooser.GetSelected();
     fmt::print("Auto selected: {}\n", m_autoSelected);
+    //m_armMotor->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 
     m_chooser.SetDefaultOption(kAutoBalance, kAutoBalance);
     m_chooser.AddOption(kAutoStraight, kAutoStraight);
@@ -159,6 +160,7 @@ class Robot : public frc::TimedRobot {
 
     if (btnBoard.GetRawButton(5) || m_xboxControl.GetLeftBumper()) {m_armMotor->Set(ControlMode::PercentOutput, 0.125);}
     else if (btnBoard.GetRawButton(6) || m_xboxControl.GetRightBumper()) {m_armMotor->Set(ControlMode::PercentOutput, -0.125);}
+    else {m_armMotor->Set(ControlMode::PercentOutput, -0);}
 
     if (btnBoard.GetRawButtonPressed(7)) {SendRoller(-1);}
     else if (btnBoard.GetRawButtonPressed(8)) {SendRoller(1);}
