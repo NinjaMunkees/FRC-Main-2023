@@ -83,7 +83,8 @@ class Robot : public frc::TimedRobot {
     rollerTimer.Restart();
     if (rollerTimer.Get().value() < 1)
     {
-      m_rollerMotor.Set(0.125);
+      m_rollerMotorLeft.Set(rollerSpeed);
+      m_rollerMotorRight.Set(rollerSpeed);
     }
   }
 
