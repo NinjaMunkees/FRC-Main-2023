@@ -5,13 +5,14 @@
 #define MOTOR_BRUSHLESS rev::CANSparkMaxLowLevel::MotorType::kBrushless
 
 double armSpeed = 0.1;
-double rollerSpeed = 0.1;
+double rollerSpeed = 0.125;
 
 frc::Joystick btnBoard{1};
 
 TalonFX * m_armMotor;
 rev::CANSparkMax m_rollerMotorRight{12, MOTOR_BRUSHLESS};
 rev::CANSparkMax m_rollerMotorLeft{14, MOTOR_BRUSHLESS};
+
 
 void SendArm(int armPos);
 

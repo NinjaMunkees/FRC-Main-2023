@@ -163,8 +163,12 @@ class Robot : public frc::TimedRobot {
     if (btnBoard.GetRawButtonPressed(7)) {SendRoller(-1);}
     else if (btnBoard.GetRawButtonPressed(8)) {SendRoller(1);}
 
-    if (btnBoard.GetRawButtonPressed(9)) {m_rollerMotor.Set(rollerSpeed);}
-    else if (btnBoard.GetRawButtonPressed(10)) {m_rollerMotor.Set(rollerSpeed);}
+    if (btnBoard.GetRawButtonPressed(9)) {
+      m_rollerMotorLeft.Set(rollerSpeed);
+      m_rollerMotorRight.Set(-rollerSpeed);}
+    else if (btnBoard.GetRawButtonPressed(10)) {
+      m_rollerMotorLeft.Set(-rollerSpeed);
+      m_rollerMotorRight.Set(rollerSpeed);}
 
     if (m_xboxControl.GetAButtonPressed())
     {balance = !balance;}
