@@ -33,16 +33,10 @@ class Robot : public frc::TimedRobot {
   }
 */
    void RobotInit() override {
-    m_autoSelected = m_chooser.GetSelected();
-    fmt::print("Auto selected: {}\n", m_autoSelected);
-    //m_armMotor->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
-
-    m_chooser.SetDefaultOption(kAutoBalance, kAutoBalance);
-    m_chooser.AddOption(kAutoStraight, kAutoStraight);
-    m_chooser.AddOption(kAutoPark, kAutoPark);
-    frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+    initPitch = pigeon.GetPitch();
 
     m_armMotor = new TalonFX(13);
+    m_armMotor->SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 
     m_frontRight.SetInverted(true);
     m_rearRight.SetInverted(true);
@@ -57,35 +51,92 @@ class Robot : public frc::TimedRobot {
   }
 
   void SendArm(int armPos){
-    switch (armPos)
+    switch (armPosition)
     {
-    case 1:
-      // if (m_armMotor->GetSelectedSensorPosition()  > 0)
-      // {
-      //   m_armMotor->Set(ControlMode::PercentOutput, -0.125);
-      // }
+    case 1: // Stage 1
+    if (m_armMotor->GetSelectedSensorPosition() != 0) {
+      if(m_armMotor->GetSelectedSensorPosition() > 0){
+        // Make arm go reverse
+        m_armMotor->Set(ControlMode::PercentOutput, 0.05);
+      } else if (m_armMotor->GetSelectedSensorPosition() < 0){
+        // Make arm go forward
+        m_armMotor->Set(ControlMode::PercentOutput, -0.05);
+      }
+    } else {
+      // stop motor
+      m_armMotor->Set(ControlMode::PercentOutput, 0);
+    }
       break;
 
-    case 2:
+    case 2: // Stage 2
+    if (m_armMotor->GetSelectedSensorPosition() != -10) {
+      if(m_armMotor->GetSelectedSensorPosition() > 0){
+        // Make arm go reverse
+        m_armMotor->Set(ControlMode::PercentOutput, 0.05);
+      } else if (m_armMotor->GetSelectedSensorPosition() < 0){
+        // Make arm go forward
+        m_armMotor->Set(ControlMode::PercentOutput, -0.05);
+      }
+    } else {
+      // stop motor
+      m_armMotor->Set(ControlMode::PercentOutput, 0);
+    }
       break;
 
-    case 3:
+    case 3: // Stage 3
+    if (m_armMotor->GetSelectedSensorPosition() != -20) {
+      if(m_armMotor->GetSelectedSensorPosition() > 0){
+        // Make arm go reverse
+        m_armMotor->Set(ControlMode::PercentOutput, 0.05);
+      } else if (m_armMotor->GetSelectedSensorPosition() < 0){
+        // Make arm go forward
+        m_armMotor->Set(ControlMode::PercentOutput, -0.05);
+      } 
+    } else {
+      // stop motor
+      m_armMotor->Set(ControlMode::PercentOutput, 0);
+    }
       break;
 
-    case 4:
+    case 4: // Stage 4
+    if (m_armMotor->GetSelectedSensorPosition() != -30) {
+      if(m_armMotor->GetSelectedSensorPosition() > 0){
+        // Make arm go reverse
+        m_armMotor->Set(ControlMode::PercentOutput, 0.05);
+      } else if (m_armMotor->GetSelectedSensorPosition() < 0){
+        // Make arm go forward
+        m_armMotor->Set(ControlMode::PercentOutput, -0.05);
+      }
+    } else {
+      // stop motor
+      m_armMotor->Set(ControlMode::PercentOutput, 0);
+    }
       break;
     
-    default:
+    default: // Stage Off
+      //m_armMotor->Set(ControlMode::PercentOutput, 0);
       break;
     }
   }
 
+
+// untested
+  void DriveTo (double speed, int distance)
+  { 
+    if (distance > 0) {
+      if (fabs(m_rearRightEncoder.GetPosition()) < distance) {
+        m_robotDrive.DriveCartesian(speed, 0, 0);
+      }
+      else{m_robotDrive.DriveCartesian(-0, 0, 0);} // Stop
+    } 
+  }
+  
   void SendRoller(int rollerPolarity){
     rollerTimer.Restart();
     if (rollerTimer.Get().value() < 1)
     {
-      m_rollerMotorLeft.Set(rollerSpeed);
-      m_rollerMotorRight.Set(rollerSpeed);
+      m_rollerMotorLeft.Set(rollerSpeed * rollerPolarity);
+      m_rollerMotorRight.Set(-rollerSpeed * rollerPolarity);
     }
   }
 
@@ -95,6 +146,8 @@ class Robot : public frc::TimedRobot {
     frc::SmartDashboard::SmartDashboard::PutNumber("Front Right Encoder", m_frontRightEncoder.GetPosition());
     frc::SmartDashboard::SmartDashboard::PutNumber("Rear Right Encoder", m_rearRightEncoder.GetPosition());
 
+    frc::SmartDashboard::SmartDashboard::PutNumber("Arm Encoder", m_armMotor->GetSelectedSensorPosition());
+
     m_rightEncoder = (m_rearRightEncoder.GetPosition() + m_frontRightEncoder.GetPosition()) / 2;
     m_leftEncoder = (m_rearLeftEncoder.GetPosition() + m_frontLeftEncoder.GetPosition()) / 2;
 
@@ -102,7 +155,7 @@ class Robot : public frc::TimedRobot {
     yaw = pigeon.GetYaw();
     roll = pigeon.GetRoll();
 
-    goodPitch = pitch * balanceRate / 60;
+    goodPitch = (pitch - initPitch) * balanceRate;
     PUT_NUMBER("Good Pitch", goodPitch);
 
     PUT_NUMBER("yaw", yaw);
@@ -110,7 +163,7 @@ class Robot : public frc::TimedRobot {
     PUT_NUMBER("roll", roll);
   }
 
-  void AutonomousInit() override {\
+  void AutonomousInit() override {
     m_frontLeftEncoder.SetPosition(0);
     m_rearLeftEncoder.SetPosition(0);
     m_frontRightEncoder.SetPosition(0);
@@ -121,56 +174,51 @@ class Robot : public frc::TimedRobot {
 
   void AutonomousPeriodic() override {
 
-    if (m_autoSelected == kAutoBalance) {
-
-      if (m_rearLeftEncoder.GetPosition() < desiredPos && m_frontRightEncoder.GetPosition() < desiredPos)
+      if (abs(goodPitch) > balanceThresh)
       {
-        leftYRaw = autoSpeedY;
+        balance = true;
       }
-      else{balance = true;}
-      
-      if (balance)
+
+      if (!balance)
       {
-        leftY = -goodPitch / 2.5;
+        SendRoller(-1);
+        leftY = autoSpeedY;
+      }
+      else if (balance)
+      {
+        m_rollerMotorLeft.Set(-0);
+        m_rollerMotorRight.Set(0);
+        leftY = goodPitch / 2.5 / 3 * 1.15;
       }
       else{leftY = leftYRaw;}
-      
-      m_robotDrive.DriveCartesian(-leftY, -leftX, rightX);
-    }
-    else if (m_autoSelected == kAutoStraight)
-    {
-      if (fabs(m_rearRightEncoder.GetPosition()) < 30)
-      {
-       m_robotDrive.DriveCartesian(-0.2, 0, 0);
-      }
-      else{m_robotDrive.DriveCartesian(-0, 0, 0);}       
-    }
-    else if (m_autoSelected == kAutoPark)
-    {
-      m_robotDrive.DriveCartesian(-0, 0, 0);
-    }
+
+      m_robotDrive.DriveCartesian(leftY, -leftX, rightX);
   }
 
   void TeleopPeriodic() override {
 
-    if (btnBoard.GetRawButtonPressed(1)) { SendArm(1);}
-    else if (btnBoard.GetRawButtonPressed(2)) {SendArm(2);}
-    else if (btnBoard.GetRawButtonPressed(3)) {SendArm(3);}
-    else if (btnBoard.GetRawButtonPressed(4)) {SendArm(4);}
+    if (btnBoard.GetRawButtonPressed(1)) { armPosition = 1;}
+    else if (btnBoard.GetRawButtonPressed(2)) { armPosition = 2;}
+    else if (btnBoard.GetRawButtonPressed(3)) { armPosition = 3;}
+    else if (btnBoard.GetRawButtonPressed(4)) { armPosition = 4;}
 
-    if (btnBoard.GetRawButton(5) || m_xboxControl.GetLeftBumper()) {m_armMotor->Set(ControlMode::PercentOutput, 0.125);}
-    else if (btnBoard.GetRawButton(6) || m_xboxControl.GetRightBumper()) {m_armMotor->Set(ControlMode::PercentOutput, -0.125);}
+    if (btnBoard.GetRawButton(5) || m_xboxControl.GetLeftBumper()) { armPosition = 0; m_armMotor->Set(ControlMode::PercentOutput, armSpeed);}
+    else if (btnBoard.GetRawButton(6) || m_xboxControl.GetRightBumper()) { armPosition = 0; m_armMotor->Set(ControlMode::PercentOutput, -armSpeed);}
     else {m_armMotor->Set(ControlMode::PercentOutput, -0);}
 
     if (btnBoard.GetRawButtonPressed(7)) {SendRoller(-1);}
     else if (btnBoard.GetRawButtonPressed(8)) {SendRoller(1);}
 
-    if (btnBoard.GetRawButtonPressed(9)) {
+    if (btnBoard.GetRawButton(9)) {
       m_rollerMotorLeft.Set(rollerSpeed);
       m_rollerMotorRight.Set(-rollerSpeed);}
-    else if (btnBoard.GetRawButtonPressed(10)) {
-      m_rollerMotorLeft.Set(-rollerSpeed);
+    else if (btnBoard.GetRawButton(10)) {
+      m_rollerMotorLeft.Set(-rollerSpeed); 
       m_rollerMotorRight.Set(rollerSpeed);}
+    else{
+      m_rollerMotorLeft.Set(-0);
+      m_rollerMotorRight.Set(0);
+    }
 
     if (m_xboxControl.GetAButtonPressed())
     {balance = !balance;}
@@ -183,14 +231,13 @@ class Robot : public frc::TimedRobot {
       leftY = -goodPitch / 2.5;
     }
     else{
-      if(fabs(leftXRaw) < deadzone) {leftX = 0;} else{leftX = leftXRaw / 2;}
-      if(fabs(leftYRaw) < deadzone) {leftY = 0;} else {leftY = leftYRaw / 2;}
-      if(fabs(rightXRaw) < deadzone) {rightX = 0;} else {rightX = rightXRaw / 2;}
+      if(fabs(leftXRaw) < deadzone) {leftX = 0;} else{leftX = leftXRaw / 1.5;}
+      if(fabs(leftYRaw) < deadzone) {leftY = 0;} else {leftY = leftYRaw / 1.5;}
+      if(fabs(rightXRaw) < deadzone) {rightX = 0;} else {rightX = rightXRaw / 1.5;}
     }
 
-    PUT_NUMBER("LEFTY", -leftY);
-    
-    m_robotDrive.DriveCartesian(-leftY, -leftX, rightX);
+    SendArm(1);
+    m_robotDrive.DriveCartesian(-leftY, leftX, rightX);
   }
 };
 
