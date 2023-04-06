@@ -41,28 +41,90 @@ class Robot : public frc::TimedRobot {
     SendArm(0);
   }
 
+  void DriveTo (double speed, int distance)
+  { 
+    if (distance > 0) {
+      if (fabs(m_rearRightEncoder.GetPosition()) < distance) {
+        m_robotDrive.DriveCartesian(speed, 0, 0);
+      }
+      else{m_robotDrive.DriveCartesian(-0, 0, 0);} // Stop
+    } 
+  }
+
   void SendArm(int armPos){
     switch (armPos)
     {
-    case 1:
+    case 1: // Stage 1
+    while (m_armMotor->GetSelectedSensorPosition() != 0) {
+      if(m_armMotor->GetSelectedSensorPosition() > 0){
+        // Make arm go reverse
+        m_armMotor->Set(ControlMode::PercentOutput, 0.05);
+      } else if (m_armMotor->GetSelectedSensorPosition() < 0){
+        // Make arm go forward
+        m_armMotor->Set(ControlMode::PercentOutput, -0.05);
+      }
+    }
+      // stop motor
+      m_armMotor->Set(ControlMode::PercentOutput, 0);
       break;
 
-    case 2:
+    case 2: // Stage 2
+    while (m_armMotor->GetSelectedSensorPosition() != 10) {
+      if(m_armMotor->GetSelectedSensorPosition() > 0){
+        // Make arm go reverse
+        m_armMotor->Set(ControlMode::PercentOutput, 0.05);
+      } else if (m_armMotor->GetSelectedSensorPosition() < 0){
+        // Make arm go forward
+        m_armMotor->Set(ControlMode::PercentOutput, -0.05);
+      }
+    }
+      // stop motor
+      m_armMotor->Set(ControlMode::PercentOutput, 0);
       break;
 
-    case 3:
+    case 3: // Stage 3
+    while (m_armMotor->GetSelectedSensorPosition() != 20) {
+      if(m_armMotor->GetSelectedSensorPosition() > 0){
+        // Make arm go reverse
+        m_armMotor->Set(ControlMode::PercentOutput, 0.05);
+      } else if (m_armMotor->GetSelectedSensorPosition() < 0){
+        // Make arm go forward
+        m_armMotor->Set(ControlMode::PercentOutput, -0.05);
+      }
+    }
+      // stop motor
+      m_armMotor->Set(ControlMode::PercentOutput, 0);
       break;
 
-    case 4:
+    case 4: // Stage 4
+    while (m_armMotor->GetSelectedSensorPosition() != 30) {
+      if(m_armMotor->GetSelectedSensorPosition() > 0){
+        // Make arm go reverse
+        m_armMotor->Set(ControlMode::PercentOutput, 0.05);
+      } else if (m_armMotor->GetSelectedSensorPosition() < 0){
+        // Make arm go forward
+        m_armMotor->Set(ControlMode::PercentOutput, -0.05);
+      }
+    }
+      // stop motor
+      m_armMotor->Set(ControlMode::PercentOutput, 0);
       break;
     
-    default:
+    default: // Stage 1
+    while (m_armMotor->GetSelectedSensorPosition() != 0) {
+      if(m_armMotor->GetSelectedSensorPosition() > 0){
+        // Make arm go reverse
+        m_armMotor->Set(ControlMode::PercentOutput, 0.05);
+      } else if (m_armMotor->GetSelectedSensorPosition() < 0){
+        // Make arm go forward
+        m_armMotor->Set(ControlMode::PercentOutput, -0.05);
+      }
+    }
+      // stop motor
+      m_armMotor->Set(ControlMode::PercentOutput, 0);
       break;
     }
   }
-
-  void SendRoller(int rollerPolarity){
-    rollerTimer.Stop();m_rollerMotor
 
   void RobotPeriodic() override {
     frc::SmartDashboard::SmartDashboard::PutNumber("Front Left Encoder", m_frontLeftEncoder.GetPosition());
@@ -114,11 +176,10 @@ class Robot : public frc::TimedRobot {
     }
     else if (m_autoSelected == kAutoStraight)
     {
-      if (fabs(m_rearRightEncoder.GetPosition()) < 30)
-      {
-       m_robotDrive.DriveCartesian(-0.2, 0, 0);
-      }
-      else{m_robotDrive.DriveCartesian(-0, 0, 0);}       
+      DriveTo(-0.2, 15);
+      SendArm(4);
+      // Release  Claw  
+      // This prolly repeats I should add something to stop this   
     }
     else if (m_autoSelected == kAutoPark)
     {
