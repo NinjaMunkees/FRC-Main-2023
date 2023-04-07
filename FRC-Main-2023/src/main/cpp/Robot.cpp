@@ -181,14 +181,21 @@ class Robot : public frc::TimedRobot {
 
       if (!balance)
       {
+        m_armMotor->Set(ControlMode::PercentOutput, -0.05);
+        if (m_armMotor->GetSelectedSensorPosition() >= 2048)
+        {
+          m_armMotor->Set(ControlMode::PercentOutput, 0);
+        }
         SendRoller(-1);
         leftY = autoSpeedY;
       }
       else if (balance)
       {
+        // Sets arm back to zero (prolly need to make sure it knows to change direction based on encoder value)
+        if (m_armMotor->GetSelectedSensorPosition() != 0){m_armMotor->Set(ControlMode::PercentOutput, 0.05);}else{m_armMotor->Set(ControlMode::PercentOutput, 0);}
         m_rollerMotorLeft.Set(-0);
         m_rollerMotorRight.Set(0);
-        leftY = goodPitch / 2.5 / 3 * 1.15;
+        leftY = goodPitch / 2.5 / 2 * 1.15; // used to be leftY = goodPitch / 2.5 / 3 * 1.15;
       }
       else{leftY = leftYRaw;}
 
